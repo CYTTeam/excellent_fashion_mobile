@@ -1,7 +1,8 @@
 import React from 'react';
 import classPrefix from '../decorators/classPrefix';
 import classNames from 'classnames';
-import transitionEvent from '../utils/TransitionEvent';
+import move from 'move-js';
+
 
 /*
  *   react component Accordion.Item
@@ -10,59 +11,71 @@ import transitionEvent from '../utils/TransitionEvent';
 @
 classPrefix('accordion-item') class AccordionItem extends React.Component {
   static propTypes = {
-      id: React.PropTypes.number,
-      className: React.PropTypes.object,
-      title: React.PropTypes.node.isRequired,
+      eventKey: React.PropTypes.number,
+      title: React.PropTypes.string.isRequired,
+      handleChanged: React.PropTypes.func,
       open: React.PropTypes.bool,
       children: React.PropTypes.node,
-  }
-
+  };
 
   static defaultProps = {
       open: false,
-  }
+  };
 
   state = {
       open: this.props.open,
-  }
+  };
 
 
   componentDidMount() {
       const node = this.refs.itemContent;
       const accordionItem = this.refs.accordionItem;
-      if (!this.props.open) {
+      const open = this.state.open;
+      if (!open) {
           node.style.height = 0 + 'px';
           accordionItem.classList.add('accordion-close');
       } else {
-          const height = node.scrollHeight || parseInt(node.children[0].style.height, 10);
-          node.style.height = height + 'px';
+          node.style.height = node.scrollHeight + 'px';
           accordionItem.classList.add('accordion-open');
       }
   }
 
-  handleAccordionItemClick = () => {
+  componentWillReceiveProps(nextProps) {
       const open = this.state.open;
-      if (open) {
-          this.setState({open: false}, this._handleCollapse);
-      } else {
-          this.setState({open: true}, this._handleExpand);
+      if (nextProps.open !== this.props.open) {
+          if (open) {
+              this.setState({open: false}, this._handleCollapse);
+          } else {
+              this.setState({open: true}, this._handleExpand);
+          }
       }
   }
 
+  shouldComponentUpdate(nextProps) {
+      return this.props.open !== nextProps.open;
+  }
+
+
+  handleAccordionItemClick = () => {
+      const {handleChanged, eventKey} = this.props;
+      if (handleChanged) {
+          handleChanged(eventKey);
+      }
+  };
 
   _handleExpand = () => {
       const node = this.refs.itemContent;
       const accordionItem = this.refs.accordionItem;
-      const complete = () => {
-          this.collapsing = false;
-      };
       accordionItem.classList.remove('accordion-close');
       accordionItem.classList.add('accordion-open');
-      transitionEvent.one(node, complete);
       //  获得panel元素auto的高度
       const height = node.scrollHeight;
-      node.style.height = height + 'px';
-  }
+      move(node)
+        .set('height', height + 'px')
+        .end(() => {
+            this.collapsing = false;
+        });
+  };
 
 
   _handleCollapse = () => {
@@ -73,9 +86,10 @@ classPrefix('accordion-item') class AccordionItem extends React.Component {
           accordionItem.classList.add('accordion-close');
           this.collapsing = false;
       };
-      transitionEvent.one(node, complete);
-      node.style.height = 0 + 'px';
-  }
+      move(node)
+        .set('height', 0)
+        .end(complete);
+  };
 
 
   render() {
@@ -101,7 +115,7 @@ classPrefix('accordion-item') class AccordionItem extends React.Component {
           props.children
       );
 
-      const itemClassName = classNames('card', this.getPrefix(), this.props.className);
+      const itemClassName = classNames('card', this.getPrefix());
       return (
           <li className = {itemClassName} ref="accordionItem">
               {itemHeader}

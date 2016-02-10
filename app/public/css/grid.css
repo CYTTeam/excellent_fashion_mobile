@@ -10,8 +10,10 @@
 .row {
     display: flex;
     flex-wrap: wrap;
-    margin-left: calc(var(--gutter)px / 2);
-    margin-right: calc(var(--gutter)px / 2);
+}
+
+.row-direction-col {
+    flex-direction: column;
 }
 
 .row-no-margin {
@@ -40,10 +42,6 @@
     justify-content: flex-end;
 }
 
-[class|='col'] {
-    padding-left: calc(var(--gutter)px / 2);
-    padding-right: calc(var(--gutter)px / 2);
-}
 
 .col-1 {flex: 1}
 .col-2 {flex: 2}

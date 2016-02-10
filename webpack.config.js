@@ -76,7 +76,9 @@ if (TARGET === 'start' || !TARGET) {
         },
         plugins: [
             new HtmlWebpackPlugin({
-                title: 'jcDemo'
+                title: '卓尚服饰',
+                template: 'template-index.html',
+                inject: 'body'
             }),
             new webpack.HotModuleReplacementPlugin()
         ]
@@ -87,7 +89,9 @@ if (TARGET === 'build') {
     module.exports = merge(common, {
         plugins: [
             new HtmlWebpackPlugin({
-                title: 'jcDemo'
+                title: '卓尚服饰',
+                template: 'template-index.html',
+                inject: 'body'
             })
         ]
     });

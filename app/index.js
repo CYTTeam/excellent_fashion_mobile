@@ -7,20 +7,20 @@ import {Router, Route } from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import createHashHistory from 'history/lib/createHashHistory';
 
+import MainPage from './page/MainPage.js';
 
 const history = config.environment === 'production' ? createBrowserHistory() : createHashHistory();
 window.React = React;
 
 const Routes = (
     <Router history={history}>
-        <Route path="/" component={BaseLayout} />
+        <Route path="/" component={MainPage} />
     </Router>
 );
 
 
 (function main() {
     const app = document.createElement('div');
-    app.style.height = '100%';
     document.body.appendChild(app);
     ReactDOM.render(Routes, app);
 })();

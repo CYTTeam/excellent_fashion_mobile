@@ -16,23 +16,11 @@
   display: block;
   padding: .75rem 1.25rem;
   margin-bottom: -.0625rem;
-  border: .0625rem solid #ddd;
   background-color: #fff;
   &:first-child {
-    border-radius: 0.25rem 0.25rem 0 0;
+    padding-top: 2rem;
   }
   &:last-child {
-    border-radius: 0 0 0.25rem 0.25rem;
-  }
-
-  &.active {
-    color: var(--list-group-active-color);
-    background-color: var(--list-group-active-bg);
-    border-color: var(--list-group-active-border);
-  }
-  a&:hover {
-    color: var(--list-group-hover-color);
-    text-decoration: none;
-    background-color: var(--list-group-hover-bg);
+    padding-bottom: 2rem;
   }
 }

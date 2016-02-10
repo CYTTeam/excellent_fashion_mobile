@@ -10,19 +10,16 @@
 @import 'reboot.css';
 @import 'utilities.css';
 @import 'grid.css';
-@import 'font-awesome.css';
 @import 'animation.scss';
 @import 'buttons.scss';
 @import 'list-group.scss';
-@import 'form.scss';
-@import 'tables.scss';
 @import 'card.scss';
 @import 'breadcrumb.css';
 
 /*Component CSS*/
-@import 'dropdown.scss';
-@import 'modal.scss';
+@import 'navbar.css';
 @import 'accordion.scss';
+@import 'slick.css';
 
 /*Admin CSS*/
 @import 'admin.scss';

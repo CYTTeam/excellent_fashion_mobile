@@ -4,17 +4,23 @@
   & &-hd {
     cursor: pointer;
     user-select: none;
-    font-size: 14px;
-      &:after{
-        @mixin fa;
-        position: absolute;
-        right: 16px;
-        top: 12px;
-     }
+    font-size: 16px;
+    position: relative;
+    &:after {
+            content: '';
+            position: absolute;
+            top: 12px;
+            top: 5px;
+            right: 2rem;
+            width: 17px;
+            background-repeat: no-repeat;
+            background-size: 100%;
+            bottom: 5px;
+            background-position: center;
+    }
   }
   & &-bd {
     overflow:hidden;
-    transition: height .3s ease-out;
   }
   &+& {
       border-top: 1px solid #dedede;
@@ -24,7 +30,7 @@
 .accordion-open {
     .accordion-item-hd {
         &:after{
-            content: "\f078";
+            background-image: url('../images/navbar/less.png');
         }
     }
 
@@ -36,7 +42,7 @@
 .accordion-close {
     .accordion-item-hd {
         &:after{
-        content: "\f054";
+          background-image: url('../images/navbar/more.png');
       }
     }
     .accordion-item-bd {

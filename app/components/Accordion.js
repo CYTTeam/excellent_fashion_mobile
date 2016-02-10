@@ -1,26 +1,24 @@
-import React from 'react';
-import AccordionItem from './AccordionItem';
+import React, {PropTypes, Component} from 'react';
 import classPrefix from '../decorators/classPrefix';
-import classNames from 'classnames';
 
 
 /*
  *   react component Accordion
  * */
 
-@classPrefix('accordion') class Accordion extends React.Component {
+@classPrefix('accordion') class Accordion extends Component {
     static propTypes = {
-        data: React.PropTypes.array.isRequired,
-        autoToggle: React.PropTypes.bool,
-    }
+        defaultActiveKey: PropTypes.number,
+        children: PropTypes.node,
+    };
 
     static defaultProps = {
-        autoToggle: true,
-    }
+        defaultActiveKey: -1,
+    };
 
     state = {
-        data: this.props.data,
-    }
+        activeKey: this.props.defaultActiveKey,
+    };
 
     componentWillReceiveProps(nextProps) {
         this.setState({
@@ -28,42 +26,37 @@ import classNames from 'classnames';
         });
     }
 
-    //  传给子组件，建立连接
-    handleChanged = (id, toggleOpen) => {
-        this.setState({
-            data: this.state.data.map((value, index) => {
-                if (id === index) {
-                    value.open = toggleOpen;
-                } else {
-                    value.open = this.props.autoToggle ? false : value.open;
-                }
-                return value;
-            }),
-        });
-    }
+    handleChanged = (itemKey) => {
+        //  传给子组件，建立连接
+        let key = itemKey;
+        if (this.state.activeKey === key) {
+            key = null;
+        }
 
-    renderAccordionItem = (value, index) => {
-        return (
-            <AccordionItem
-                key={index}
-                id={index}
-                open={value.open}
-                title={value.title}
-                onChanged={this.handleChanged}
-                >
-                {value.content}
-            </AccordionItem>
-        );
-    }
+        this.setState({
+            activeKey: key,
+        });
+    };
+
 
     render() {
-        const children = this.state.data.map(this.renderAccordionItem);
-        const accordionClassName = classNames(this.getPrefix(), this.props.className);
+        const {activeKey} = this.state;
+        const children = React.Children.map(this.props.children, (child, index) => {
+            const props = {
+                eventKey: index,
+                handleChanged: this.handleChanged,
+                open: activeKey === index,
+            };
+            return React.cloneElement(child, props);
+        });
+
+
         return (
-            <ul className={accordionClassName}>{children}</ul>
+            <ul className={this.getPrefix()}>
+                {children}
+            </ul>
         );
     }
 }
 
-Accordion.Item = AccordionItem;
 export default Accordion;
